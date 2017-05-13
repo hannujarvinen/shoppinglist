@@ -1,0 +1,120 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Shopping List</title>
+  <meta name="description" content="The Shopping List App">
+  <meta name="author" content="Hannu Järvinen">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!--<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">-->
+  <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
+  <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script>
+    $(document).on("domChanged", function () {
+	  <!--alert("domchange"); -->
+	  $("button").off("swipeleft");
+	  $("button").off("swiperight");
+	  $("button").off("click");
+	  $("button").on("swiperight",function(){
+		<!--alert("swiperight");-->
+		var item = $(this);
+		moveToReserve(item);
+	  });
+	  $("button").on("swipeleft",function(){
+		var item = $(this);
+		moveToList(item);
+	  });                       
+	  $("button").on("click",function(){
+		<!--alert("click " + $(this).attr("id"));-->
+		var item = $(this);
+		if ( $(this).attr("id") == "add" ) {
+			return;
+		}
+		var itemname = prompt("Modify",item.html());
+		if ( itemname != null ) {
+			item.html(itemname);
+		}
+	  });                       
+    });
+	$(document).on("pagecreate","#pageone",function(){
+		$("body").trigger("domChanged");
+	});
+	
+	function addNewItem() {
+		var itemname = prompt("New item","");
+		document.getElementById("currentlist").appendChild(createNewCurrentListItem(itemname));
+		$("body").trigger("domChanged");
+	}
+	function createNewCurrentListItem(text) {
+		var btn = document.createElement("BUTTON");
+		btn.setAttribute("type", "button");
+		btn.setAttribute("class", "btn btn-info");
+		btn.innerHTML = text;
+		return btn;
+	}
+	function moveToReserve(item) {
+		<!--var tmp = item.clone();-->
+		item.remove();
+		item.attr("class", "btn ui-btn ui-shadow ui-corner-all");
+		item.appendTo(document.getElementById("reservelist"));
+		$("body").trigger("domChanged");
+	}
+	function moveToList(item) {
+		var tmp = item.clone();
+		item.remove();
+		tmp.attr("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
+		tmp.appendTo(document.getElementById("currentlist"));
+		$("body").trigger("domChanged");
+	}
+	function moveAllToReserve() {
+		var child = $("#currentlist").children().first();
+		while ($("#currentlist").children().length != 0) {
+			moveToReserve(child);
+			child = $("#currentlist").children().first();
+		}
+	}
+	</script>
+  <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
+
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+<div data-role="page" id="pageone">
+	<div class="col-sm-12">
+		<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="addNewItem()">
+		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+		</button>
+		<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
+		  Clear list
+		</button>
+		<div class="col-sm-6">
+			<div id="currentlist" class="btn-group-vertical btn-group-lg">
+				<button type="button" class="btn btn-info">Maito</button>
+				<button type="button" class="btn btn-info">iKaffe</button>
+				<button type="button" class="btn btn-info">Kauramaito</button>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div id="reservelist" class="btn-group-vertical btn-group-lg pull-right">
+				<button type="button" class="btn">Patterit</button>
+				<button type="button" class="btn">Kahvi</button>
+				<button type="button" class="btn">Sokeri</button>
+				<button type="button" class="btn">Suola</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!--  <script src="js/scripts.js"></script>-->
+</body>
+</html>
