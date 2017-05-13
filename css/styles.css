@@ -1,8 +1,41 @@
-@media (max-width: 768px) {
+@media (min-width: 993px) {
   .btn-responsive {
-    padding:2px 4px;
-    font-size:80%;
-    line-height: 1;
+    padding:4px 8px;
+    font-size:220%;
+    line-height: 2;
     border-radius:3px;
   }
+}
+@media (max-width: 768px) {
+  .btn-responsive {
+    padding:4px 8px;
+    font-size:220%;
+    line-height: 2;
+    border-radius:3px;
+  }
+}
+@media (min-width: 769px) and (max-width: 992px) {
+  .btn-responsive {
+    padding:4px 9px;
+    font-size:120%;
+    line-height: 1.2;
+  }
+}
+div.button {
+    font-size: 250%;
+}
+p {
+    font-size: 100%;
+}
+.btn-xl {
+    padding: 10px 10px;
+    font-size: 220%;
+    border-radius: 10px;
+    width:80%;
+}
+.btn-ctrl {
+    padding: 10px 10px;
+    font-size: 300%;
+    border-radius: 30px;
+    width:20%;
 }
