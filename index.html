@@ -7,7 +7,8 @@
   <title>Shopping List</title>
   <meta name="description" content="The Shopping List App">
   <meta name="author" content="Hannu Järvinen">
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://hannujarvinen.github.io/shoppinglist/css/styles.css">
   <!--<link rel="stylesheet" href="./css/styles.css">-->
@@ -26,7 +27,13 @@
 	  $("button").on("swiperight",function(){
 		<!--alert("swiperight");-->
 		var item = $(this);
-		moveToReserve(item);
+		if ( item.parent().attr("id") == "reservelist" ) {
+			removeItem(item);
+		} else {
+			if ( item.parent().attr("id") == "currentlist" ) {
+				moveToReserve(item);
+			}
+		}
 	  });
 	  $("button").on("swipeleft",function(){
 		var item = $(this);
@@ -56,7 +63,7 @@
 	function createNewCurrentListItem(text) {
 		var btn = document.createElement("BUTTON");
 		btn.setAttribute("type", "button");
-		btn.setAttribute("class", "btn btn-info");
+		btn.setAttribute("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
 		btn.innerHTML = text;
 		return btn;
 	}
@@ -81,6 +88,11 @@
 			child = $("#currentlist").children().first();
 		}
 	}
+	function removeItem(item) {
+		if ( confirm("Delete '" + item.html() + "' permanently?") ) {
+			item.remove();
+		}
+	}
 	</script>
   <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
 
@@ -91,26 +103,28 @@
 
 <body>
 <div data-role="page" id="pageone">
-	<div class="col-sm-12">
-		<button id="add" type="button" class="btn btn-info btn-lg btn-ctrl pull-right" aria-label="Left Align" onclick="addNewItem()">
+	<div class="col-xs-12 container-fluid">
+		<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="addNewItem()">
 		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 		</button>
-		<button id="add" type="button" class="btn btn-info btn-lg btn-ctrl pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
+		<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
 		  Clear list
 		</button>
+	</div>
+	<div class="col-xs-12 container-fluid">
 		<div class="col-sm-6">
-			<div id="currentlist" class="btn-group-vertical btn-group-lg">
-				<button type="button" class="btn-lg btn-xl btn-info btn-responsive ui-btn ui-shadow ui-corner-all">Maito</button>
-				<button type="button" class="btn-lg btn-xl btn-info btn-responsive ui-btn ui-shadow ui-corner-all">iKaffe</button>
-				<button type="button" class="btn-lg btn-xl btn-info btn-responsive ui-btn ui-shadow ui-corner-all">Kauramaito</button>
+			<div id="currentlist" class="btn-group-vertical btn-group-sm">
+				<button type="button" class="btn btn-info ui-btn ui-shadow ui-corner-all">Maito</button>
+				<button type="button" class="btn btn-info ui-btn ui-shadow ui-corner-all">iKaffe</button>
+				<button type="button" class="btn btn-info ui-btn ui-shadow ui-corner-all">Kauramaito</button>
 			</div>
 		</div>
 		<div class="col-sm-6">
-			<div id="reservelist" class="btn-group-vertical btn-group-lg pull-right">
-				<button type="button" class="btn-lg btn-xl btn-responsive ui-btn ui-shadow ui-corner-all">Patterit</button>
-				<button type="button" class="btn-lg btn-xl btn-responsive ui-btn ui-shadow ui-corner-all">Kahvi</button>
-				<button type="button" class="btn-lg btn-xl btn-responsive ui-btn ui-shadow ui-corner-all">Sokeri</button>
-				<button type="button" class="btn-lg btn-xl btn-responsive ui-btn ui-shadow ui-corner-all">Suola</button>
+			<div id="reservelist" class="btn-group-vertical btn-group-sm pull-right">
+				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Patterit</button>
+				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Kahvi</button>
+				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Sokeri</button>
+				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Suola</button>
 			</div>
 		</div>
 	</div>
