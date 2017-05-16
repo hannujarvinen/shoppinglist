@@ -1,3 +1,4 @@
+/*
 @media (min-width: 993px) {
   .btn-responsive {
     padding:4px 8px;
@@ -32,4 +33,39 @@
     font-size: 300%;
     border-radius: 30px;
     width:20%;
+}
+*/
+div[id="currentlist"] > div {
+	/*display: inline-block;*/
+	background-color: lightblue;
+    /*padding: -4px 4px;*/
+    border-radius: 6px;
+	border: 1px solid black;
+}
+div[id="reservelist"] > div {
+	/*display: inline-block;*/
+	background-color: lightgrey;
+    /*padding: -4px 4px;*/
+    border-radius: 6px;
+	border: 1px solid black;
+}
+.ctrl {
+	/*display: inline-block;*/
+	background-color: lightblue;
+	border: 1px solid black;
+    font-size: 100%;
+    border-radius: 6px;
+	margin: auto;
+	text-align: center;
+	width:5%;
+}
+.ctrl span{
+	font-size: xx-small;
+	 line-height: 10px;
+}
+.sitename {
+	font-family: 'Lobster', cursive;
+	text-align: center;
+	padding: 10px 10px;
+    font-size: 150%;
 }

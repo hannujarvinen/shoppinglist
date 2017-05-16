@@ -10,21 +10,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://hannujarvinen.github.io/shoppinglist/css/styles.css">
-  <!--<link rel="stylesheet" href="./css/styles.css">-->
+  <!--<link rel="stylesheet" href="https://hannujarvinen.github.io/shoppinglist/css/styles.css">-->
+  <link rel="stylesheet" href="./css/styles.css">
+  <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <!--<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">-->
   <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
   <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script src="./js/bootbox.min.js"></script>
   <script>
     $(document).on("domChanged", function () {
-	  <!--alert("domchange"); -->
-	  $("button").off("swipeleft");
-	  $("button").off("swiperight");
-	  $("button").off("click");
-	  $("button").on("swiperight",function(){
+	  <!--alert("domchange");-->
+	  $("div.item").off("swipeleft");
+	  $("div.item").off("swiperight");
+	  $("div.itemtext").off("click");
+	  $("div.ctrl").off("click");
+	  $("button.btn-add").off("click");
+	  $("div.item").on("swiperight",function(){
 		<!--alert("swiperight");-->
 		var item = $(this);
 		if ( item.parent().attr("id") == "reservelist" ) {
@@ -35,50 +39,116 @@
 			}
 		}
 	  });
-	  $("button").on("swipeleft",function(){
+	  $("div.item").on("swipeleft",function(){
 		var item = $(this);
 		moveToList(item);
-	  });                       
-	  $("button").on("click",function(){
+	  });
+	  $("div.itemtext").on("click",function(){
 		<!--alert("click " + $(this).attr("id"));-->
 		var item = $(this);
-		if ( $(this).attr("id") == "add" ) {
-			return;
-		}
 		var itemname = prompt("Modify",item.html());
 		if ( itemname != null ) {
 			item.html(itemname);
 		}
+	  });                       
+	  $("div.ctrl").on("click",function(){
+		<!--alert("click " + $(this).attr("id"));-->
+		var item = $(this);
+		if ( $("span",this).hasClass("glyphicon-arrow-right" )) {
+			moveToReserve($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-arrow-left" )) {
+			moveToList($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-trash" )) {
+			removeItem($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-minus" )) {
+			minusOne($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-plus" )) {
+			plusOne($(this).parent());
+			return;
+		}
+	  });                       
+	  $("button.btn-add").on("click",function(){
+		bootbox.prompt("New item", function(result){ addNewItem(result); });
 	  });                       
     });
 	$(document).on("pagecreate","#pageone",function(){
 		$("body").trigger("domChanged");
 	});
 	
-	function addNewItem() {
-		var itemname = prompt("New item","");
-		document.getElementById("currentlist").appendChild(createNewCurrentListItem(itemname));
+	function plusOne(item) {
+		var itemtext = item.children().first().html();
+		var splitted = itemtext.split(" ");
+		var num = splitted[0];
+		if ( !isNaN(num++) ) {
+			splitted[0] = num;
+			item.children().first().html(splitted.join(" "));
+			return;
+		} else {
+			item.children().first().html("1 " + splitted.join(" "));
+		}
+	}
+	function minusOne(item) {
+		var itemtext = item.children().first().html();
+		var splitted = itemtext.split(" ");
+		if ( !isNaN(splitted[0]--) ) {
+			if ( splitted[0] == 0 ) {
+				splitted.shift();
+			}
+			item.children().first().html(splitted.join(" "));		
+		}
+	}
+	function addNewItem(itemname) {
+		<!--var itemname = prompt("New item","");-->
+		if ( itemname != "" ) {
+			var newItem = createNewCurrentListItem(itemname);
+			newItem.appendTo("#currentlist");
+		}
 		$("body").trigger("domChanged");
+		<!--var list = document.getElementById("currentlist"); -->
+		<!--var tmp = list.appendChild(newItem); -->
+		<!--$("#currentlist").append(newItem); -->
 	}
 	function createNewCurrentListItem(text) {
-		var btn = document.createElement("BUTTON");
-		btn.setAttribute("type", "button");
-		btn.setAttribute("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
-		btn.innerHTML = text;
-		return btn;
+		<!--var div = document.createElement("div");-->
+		var div = $('<div></div>')
+		div.attr("class", "row item");
+		<!--div.setAttribute("class", "row item");;-->
+		div.append(newitemtext(text));
+		div.append(newminus());
+		div.append(newplus());
+		div.append(newarrowright());
+		return div;
 	}
 	function moveToReserve(item) {
 		<!--var tmp = item.clone();-->
 		item.remove();
-		item.attr("class", "btn ui-btn ui-shadow ui-corner-all");
+		//item.attr("class", "btn ui-btn ui-shadow ui-corner-all");
+		$("div.ctrl",item).remove(); 
+		$("div.itemtext",item).attr("class", "col-xs-8 text-center itemtext");
+		item.append(newarrowleft());
+		item.append(newtrash());
 		item.appendTo(document.getElementById("reservelist"));
 		$("body").trigger("domChanged");
 	}
 	function moveToList(item) {
-		var tmp = item.clone();
+		<!--var tmp = item.clone();-->
 		item.remove();
-		tmp.attr("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
-		tmp.appendTo(document.getElementById("currentlist"));
+		//tmp.attr("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
+		<!--tmp.remove(".ctrl");-->
+		$("div.ctrl",item).remove(); 
+		$("div.itemtext",item).attr("class", "col-xs-6 text-center itemtext");
+		item.append(newminus());
+		item.append(newplus());
+		item.append(newarrowright());
+		item.appendTo(document.getElementById("currentlist"));
 		$("body").trigger("domChanged");
 	}
 	function moveAllToReserve() {
@@ -89,9 +159,58 @@
 		}
 	}
 	function removeItem(item) {
-		if ( confirm("Delete '" + item.html() + "' permanently?") ) {
-			item.remove();
-		}
+		bootbox.confirm("Delete '" + item.children().first().html() + "' permanently?", function(result){ if (result) { item.remove(); } });
+	}
+	function newminus() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-minus");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newplus() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-plus");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newarrowright() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-arrow-right");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newarrowleft() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-arrow-left");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newtrash() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-trash");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newitemtext(text) {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-6 text-center itemtext");
+		div.innerHTML = text;
+		return div;
 	}
 	</script>
   <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
@@ -103,31 +222,53 @@
 
 <body>
 <div data-role="page" id="pageone">
-	<div class="col-xs-12 container-fluid">
-		<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="addNewItem()">
-		  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-		</button>
-		<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
-		  Clear list
-		</button>
-	</div>
-	<div class="col-xs-12 container-fluid">
-		<div class="col-sm-6">
-			<div id="currentlist" class="btn-group-vertical btn-group-sm">
-				<button type="button" class="btn btn-info ui-btn ui-shadow ui-corner-all">Maito</button>
-				<button type="button" class="btn btn-info ui-btn ui-shadow ui-corner-all">iKaffe</button>
-				<button type="button" class="btn btn-info ui-btn ui-shadow ui-corner-all">Kauramaito</button>
+	<div container-fluid">
+
+		<div class="row">
+			<div class="col-xs-12 container-fluid">
+				<button id="add" type="button" class="btn btn-info btn-lg pull-right btn-add" aria-label="Left Align">
+				  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+				</button>
+				<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
+				  Clear list
+				</button>
+			</div>
+			<div class="col-xs-12 container-fluid sitename">
+			Shopping list
 			</div>
 		</div>
-		<div class="col-sm-6">
-			<div id="reservelist" class="btn-group-vertical btn-group-sm pull-right">
-				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Patterit</button>
-				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Kahvi</button>
-				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Sokeri</button>
-				<button type="button" class="btn ui-btn ui-shadow ui-corner-all">Suola</button>
+		
+		<div class="row">
+			<div id="currentlist" class="col-xs-6">
+				<div class="row item">
+					<div class="col-xs-6 text-center itemtext">Maito</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></div>
+				</div>
+				<div class="row item">
+					<div class="col-xs-6 text-center itemtext">iKaffe</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></div>
+				</div>
+			</div>
+			<div id="reservelist" class="col-xs-6">
+				<div class="row item">
+					<div class="col-xs-8 text-center itemtext">Murot</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash" aria-hidden="true"></div>
+				</div>
+				<div class="row item">
+					<div class="col-xs-8 text-center itemtext">Viili</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash" aria-hidden="true"></div>
+				</div>
 			</div>
 		</div>
+	
 	</div>
+
 </div>
 
 
