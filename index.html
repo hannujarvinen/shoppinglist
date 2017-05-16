@@ -21,6 +21,7 @@
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <script src="./js/bootbox.min.js"></script>
   <script>
+	var listid = null;
     $(document).on("domChanged", function () {
 	  <!--alert("domchange");-->
 	  $("div.item").off("swipeleft");
@@ -46,10 +47,16 @@
 	  $("div.itemtext").on("click",function(){
 		<!--alert("click " + $(this).attr("id"));-->
 		var item = $(this);
-		var itemname = prompt("Modify",item.html());
-		if ( itemname != null ) {
-			item.html(itemname);
-		}
+		bootbox.prompt({title:"Modify", value:item.html(), callback:function(result){
+			if ( result != null && result != "" ) {
+				item.html(result);
+				}
+							}
+						});
+		<!--var itemname = prompt("Modify",item.html());-->
+		<!--if ( itemname != null ) {-->
+		<!--	item.html(itemname);-->
+		<!--}-->
 	  });                       
 	  $("div.ctrl").on("click",function(){
 		<!--alert("click " + $(this).attr("id"));-->
@@ -80,6 +87,7 @@
 	  });                       
     });
 	$(document).on("pagecreate","#pageone",function(){
+		init();
 		$("body").trigger("domChanged");
 	});
 	
@@ -107,7 +115,7 @@
 	}
 	function addNewItem(itemname) {
 		<!--var itemname = prompt("New item","");-->
-		if ( itemname != "" ) {
+		if ( itemname != null && itemname != "" ) {
 			var newItem = createNewCurrentListItem(itemname);
 			newItem.appendTo("#currentlist");
 		}
@@ -121,10 +129,20 @@
 		var div = $('<div></div>')
 		div.attr("class", "row item");
 		<!--div.setAttribute("class", "row item");;-->
-		div.append(newitemtext(text));
+		div.append(newitemtextforcurrent(text));
 		div.append(newminus());
 		div.append(newplus());
 		div.append(newarrowright());
+		return div;
+	}
+	function createNewReserveListItem(text) {
+		<!--var div = document.createElement("div");-->
+		var div = $('<div></div>')
+		div.attr("class", "row item");
+		<!--div.setAttribute("class", "row item");;-->
+		div.append(newitemtextforreserve(text));
+		div.append(newarrowleft());
+		div.append(newtrash());
 		return div;
 	}
 	function moveToReserve(item) {
@@ -132,7 +150,7 @@
 		item.remove();
 		//item.attr("class", "btn ui-btn ui-shadow ui-corner-all");
 		$("div.ctrl",item).remove(); 
-		$("div.itemtext",item).attr("class", "col-xs-8 text-center itemtext");
+		$("div.itemtext",item).attr("class", "col-xs-7 text-center itemtext");
 		item.append(newarrowleft());
 		item.append(newtrash());
 		item.appendTo(document.getElementById("reservelist"));
@@ -144,7 +162,7 @@
 		//tmp.attr("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
 		<!--tmp.remove(".ctrl");-->
 		$("div.ctrl",item).remove(); 
-		$("div.itemtext",item).attr("class", "col-xs-6 text-center itemtext");
+		$("div.itemtext",item).attr("class", "col-xs-5 text-center itemtext");
 		item.append(newminus());
 		item.append(newplus());
 		item.append(newarrowright());
@@ -206,11 +224,57 @@
 		div.append(span);
 		return div;
 	}
-	function newitemtext(text) {
+	function newitemtextforcurrent(text) {
 		var div = document.createElement("div");
-		div.setAttribute("class", "col-xs-6 text-center itemtext");
+		div.setAttribute("class", "col-xs-5 text-center itemtext");
 		div.innerHTML = text;
 		return div;
+	}
+	function newitemtextforreserve(text) {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-7 text-center itemtext");
+		div.innerHTML = text;
+		return div;
+	}
+	function init() {
+		// try to read listid from local storage
+		//..
+		// if listid found
+		// getDB(listid);
+		// if no list id found, this is first start
+		// create new list or load existing one with listid
+		var jsonstr = getDB(listid);
+		var json = JSON.parse(jsonstr);
+		listid = json.listid;
+		for ( var i = 0; i < json.currentlist.length; i++) {
+			var newItem = createNewCurrentListItem(json.currentlist[i]);
+			newItem.appendTo("#currentlist");
+		}
+		for ( var i = 0; i < json.reservelist.length; i++) {
+			var newItem = createNewReserveListItem(json.reservelist[i]);
+			newItem.appendTo("#reservelist");
+		}
+	}
+	function getDB(listid) {
+		var jsonstr = '{"listid": "CDAsfSDGF", "currentlist": ["iKaffe", "Mysli"], "reservelist": ["Viili", "Maito", "Muroja"] }';
+		return jsonstr;
+	}
+	function putDB(listid) {
+		var data = new Object();
+		data.listid = listid;
+		var clistarray = [];
+		var currentlist = $("#currentlist");
+		for ( var i = 0; i < currentlist.children().length; i++ ) {
+			clistarray.push($("div.itemtext",currentlist.children()[i]).html());
+		}
+		data.currentlist = clistarray;
+		var rlistarray = [];
+		var reservelist = $("#reservelist");
+		for ( var i = 0; i < reservelist.children().length; i++ ) {
+			rlistarray.push($("div.itemtext",reservelist.children()[i]).html());
+		}
+		data.reservelist = rlistarray;
+		alert(JSON.stringify(data));
 	}
 	</script>
   <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
@@ -222,47 +286,47 @@
 
 <body>
 <div data-role="page" id="pageone">
-	<div container-fluid">
+	<div class="container-fluid">
 
 		<div class="row">
 			<div class="col-xs-12 container-fluid">
 				<button id="add" type="button" class="btn btn-info btn-lg pull-right btn-add" aria-label="Left Align">
-				  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+				  <span class="glyphicon glyphicon-plus"></span>
 				</button>
 				<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
 				  Clear list
 				</button>
 			</div>
-			<div class="col-xs-12 container-fluid sitename">
+			<div class="col-xs-12 sitename container-fluid">
 			Shopping list
 			</div>
 		</div>
 		
 		<div class="row">
-			<div id="currentlist" class="col-xs-6">
+			<div id="currentlist" class="col-xs-6 container-fluid">
 				<div class="row item">
-					<div class="col-xs-6 text-center itemtext">Maito</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></div>
+					<div class="col-xs-5 text-center itemtext">Maito</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right"></span></div>
 				</div>
 				<div class="row item">
-					<div class="col-xs-6 text-center itemtext">iKaffe</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></div>
+					<div class="col-xs-5 text-center itemtext">iKaffe</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right"></span></div>
 				</div>
 			</div>
-			<div id="reservelist" class="col-xs-6">
+			<div id="reservelist" class="col-xs-6 container-fluid">
 				<div class="row item">
-					<div class="col-xs-8 text-center itemtext">Murot</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash" aria-hidden="true"></div>
+					<div class="col-xs-7 text-center itemtext">Murot</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash"></span></div>
 				</div>
 				<div class="row item">
-					<div class="col-xs-8 text-center itemtext">Viili</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash" aria-hidden="true"></div>
+					<div class="col-xs-7 text-center itemtext">Viili</div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left"></span></div>
+					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash"></span></div>
 				</div>
 			</div>
 		</div>
