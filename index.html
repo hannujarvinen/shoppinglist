@@ -20,9 +20,17 @@
   <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <script src="./js/bootbox.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js"></script>
+  <!--<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-auth.js"></script>-->
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-database.js"></script>
+  <!--<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js"></script>-->
   <script>
 	var listid = null;
+	var database = null;
+	var initializing = true;
     $(document).on("domChanged", function () {
+	  putDB(listid);
 	  <!--alert("domchange");-->
 	  $("div.item").off("swipeleft");
 	  $("div.item").off("swiperight");
@@ -87,9 +95,26 @@
 	  });                       
     });
 	$(document).on("pagecreate","#pageone",function(){
+		initFB();
 		init();
-		$("body").trigger("domChanged");
 	});
+	
+	
+
+	function initFB() {
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyBsmf8KwJu6dcr9r_4c6SWUKXM60s0zlMI",
+			authDomain: "shoppinglist-b7c89.firebaseapp.com",
+			databaseURL: "https://shoppinglist-b7c89.firebaseio.com",
+			projectId: "shoppinglist-b7c89",
+			storageBucket: "shoppinglist-b7c89.appspot.com",
+			messagingSenderId: "282798514422"
+		};
+		firebase.initializeApp(config);
+		// Get a reference to the database service
+		database = firebase.database();
+	}
 	
 	function plusOne(item) {
 		var itemtext = item.children().first().html();
@@ -98,6 +123,7 @@
 		if ( !isNaN(num++) ) {
 			splitted[0] = num;
 			item.children().first().html(splitted.join(" "));
+			putDB(listid);
 			return;
 		} else {
 			item.children().first().html("1 " + splitted.join(" "));
@@ -110,7 +136,8 @@
 			if ( splitted[0] == 0 ) {
 				splitted.shift();
 			}
-			item.children().first().html(splitted.join(" "));		
+			item.children().first().html(splitted.join(" "));
+			putDB(listid);			
 		}
 	}
 	function addNewItem(itemname) {
@@ -238,28 +265,97 @@
 	}
 	function init() {
 		// try to read listid from local storage
-		//..
+		listid = localStorage.listid;
 		// if listid found
-		// getDB(listid);
-		// if no list id found, this is first start
-		// create new list or load existing one with listid
-		var jsonstr = getDB(listid);
-		var json = JSON.parse(jsonstr);
+		if ( !listid ) {
+			// prompt if user wants to create a new list or use an existing shared list
+			bootbox.confirm({
+				message: "Looks like this is your first time using the app with this device. Would you like to create a new list or use an existing shared list?",
+				buttons: {
+					confirm: {
+						label: 'Create a new list',
+						className: 'btn-success'
+					},
+					cancel: {
+						label: 'Use an existing shared list',
+						className: 'btn-success'
+					}
+				},
+				callback: function (result) {
+					if ( result ) {
+						// create new list
+						listid = token();
+						localStorage.listid = listid;
+						setupDBlistener(listid);
+						initializing = false;
+						putDB(listid);
+						$("body").trigger("domChanged");
+					} else {
+						// load existing shared list
+						bootbox.prompt("Please type the list identifier", function(result){
+							localStorage.listid = result;
+							setupDBlistener(result);
+						});
+					}
+				}
+			});
+		} else {
+			setupDBlistener(listid);
+		}
+		//var jsonstr = getDB(listid);
+	}
+	function token() {
+		return Math.random().toString(36).substr(2);
+	}
+	function setupDBlistener(listid) {
+		if ( listid != null && listid != "" ) {
+			var dataRef = firebase.database().ref('lists/' + listid);
+			dataRef.on('value', function(updated) {
+				updatelists(updated.val());
+			});		
+		}
+	}
+	function updatelists(jsonstr) {
+		// clear lists
+		var child = $("#currentlist").children().first();
+		while ($("#currentlist").children().length != 0) {
+			child.remove();
+			child = $("#currentlist").children().first();
+		}
+		child = $("#reservelist").children().first();
+		while ($("#reservelist").children().length != 0) {
+			child.remove();
+			child = $("#reservelist").children().first();
+		}
+		// add new lists
+		//alert(JSON.stringify(jsonstr));
+		//var json = JSON.parse(jsonstr);
+		var json = jsonstr;
 		listid = json.listid;
-		for ( var i = 0; i < json.currentlist.length; i++) {
-			var newItem = createNewCurrentListItem(json.currentlist[i]);
-			newItem.appendTo("#currentlist");
+		if ( json.currentlist ) {
+			for ( var i = 0; i < json.currentlist.length; i++) {
+				var newItem = createNewCurrentListItem(json.currentlist[i]);
+				newItem.appendTo("#currentlist");
+			}		
 		}
-		for ( var i = 0; i < json.reservelist.length; i++) {
-			var newItem = createNewReserveListItem(json.reservelist[i]);
-			newItem.appendTo("#reservelist");
+		if ( json.reservelist ) {
+			for ( var i = 0; i < json.reservelist.length; i++) {
+				var newItem = createNewReserveListItem(json.reservelist[i]);
+				newItem.appendTo("#reservelist");
+			}		
 		}
+		initializing = false;
+		$("body").trigger("domChanged");
 	}
 	function getDB(listid) {
 		var jsonstr = '{"listid": "CDAsfSDGF", "currentlist": ["iKaffe", "Mysli"], "reservelist": ["Viili", "Maito", "Muroja"] }';
 		return jsonstr;
 	}
 	function putDB(listid) {
+		//alert("putting db" + initializing);
+		if ( initializing ) {
+			return;
+		}
 		var data = new Object();
 		data.listid = listid;
 		var clistarray = [];
@@ -274,7 +370,27 @@
 			rlistarray.push($("div.itemtext",reservelist.children()[i]).html());
 		}
 		data.reservelist = rlistarray;
-		alert(JSON.stringify(data));
+		writeToFB(listid, data);
+		//alert(JSON.stringify(data));
+	}
+	function writeToFB(listid, data) {
+		if ( listid != null && listid != "" ) {
+			firebase.database().ref('lists/' + listid).set(data);		
+		} else {
+			//notify.js that unable to write because no listid
+		}
+	}
+	function share() {
+		toClipboard(listid);
+		bootbox.alert("Share your list with others by giving them this code: " + listid + " (code is copied automatically to clipboard on Android devices)");
+	}
+	function toClipboard(text) {
+		var textField = document.createElement('textarea');
+		textField.innerText = text;
+		document.body.appendChild(textField);
+		textField.select();
+		document.execCommand('copy');
+		$(textField).remove();
 	}
 	</script>
   <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
@@ -296,6 +412,9 @@
 				<button id="add" type="button" class="btn btn-info btn-lg pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
 				  Clear list
 				</button>
+				<button id="share" type="button" class="btn btn-info btn-lg pull-left" aria-label="Left Align" onclick="share()">
+				  Share list
+				</button>
 			</div>
 			<div class="col-xs-12 sitename container-fluid">
 			Shopping list
@@ -304,6 +423,7 @@
 		
 		<div class="row">
 			<div id="currentlist" class="col-xs-6 container-fluid">
+			<!--
 				<div class="row item">
 					<div class="col-xs-5 text-center itemtext">Maito</div>
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus"></span></div>
@@ -315,10 +435,10 @@
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus"></span></div>
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus"></span></div>
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right"></span></div>
-				</div>
+				</div>-->
 			</div>
 			<div id="reservelist" class="col-xs-6 container-fluid">
-				<div class="row item">
+				<!--<div class="row item">
 					<div class="col-xs-7 text-center itemtext">Murot</div>
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left"></span></div>
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash"></span></div>
@@ -327,7 +447,7 @@
 					<div class="col-xs-7 text-center itemtext">Viili</div>
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left"></span></div>
 					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash"></span></div>
-				</div>
+				</div>-->
 			</div>
 		</div>
 	
