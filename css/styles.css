@@ -44,6 +44,8 @@
 }
 body {
   width:100%;
+  background-color: #FFFFFF;
+  background-image: url(http://www.transparenttextures.com/patterns/connected.png);
 }
 div[id="currentlist"] > div {
 	/*display: inline-block;*/
@@ -82,3 +84,4 @@ span[class="glyphicon"] {
 	padding: 10px 10px;
     font-size: 150%;
 }
+
