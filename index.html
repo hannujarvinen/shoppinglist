@@ -202,9 +202,15 @@
 			moveToReserve(child);
 			child = $("#currentlist").children().first();
 		}
+		$("body").trigger("domChanged");
 	}
 	function removeItem(item) {
-		bootbox.confirm("Delete '" + item.children().first().html() + "' permanently?", function(result){ if (result) { item.remove(); } });
+		bootbox.confirm("Delete '" + item.children().first().html() + "' permanently?", function(result){ 
+			if (result) { 
+				item.remove(); 
+				$("body").trigger("domChanged");
+			} 
+		});
 	}
 	function newminus() {
 		var div = document.createElement("div");
