@@ -26,6 +26,371 @@
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-database.js"></script>
   <!--<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js"></script>-->
   <script>
+	  	var listid = null;
+	var database = null;
+	var initializing = true;
+    $(document).on("domChanged", function () {
+	  putDB(listid);
+	  <!--alert("domchange")-->
+	  $("div.item").off("swipeleft");
+	  $("div.item").off("swiperight");
+	  $("div.itemtext").off("click");
+	  $("div.ctrl").off("click");
+	  $("button.btn-add").off("click");
+	  $("div.itemtext").on("click",function(){
+		<!--alert("click " + $(this).attr("id"));-->
+		var item = $(this);
+		bootbox.prompt({title:"Modify", value:item.html(), callback:function(result){
+			if ( result != null && result != "" ) {
+				item.html(result);
+				}
+							}
+						});
+		<!--var itemname = prompt("Modify",item.html());-->
+		<!--if ( itemname != null ) {-->
+		<!--	item.html(itemname);-->
+		<!--}-->
+	  });                       
+	  $("div.ctrl").on("click",function(){
+		<!--alert("click " + $(this).attr("id"));-->
+		var item = $(this);
+		if ( $("span",this).hasClass("glyphicon-arrow-right" )) {
+			moveToReserve($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-arrow-left" )) {
+			moveToList($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-trash" )) {
+			removeItem($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-minus" )) {
+			minusOne($(this).parent());
+			return;
+		}
+		if ( $("span",this).hasClass("glyphicon-plus" )) {
+			plusOne($(this).parent());
+			return;
+		}
+	  });                       
+	  $("button.btn-add").on("click",function(){
+		bootbox.prompt("New item", function(result){ addNewItem(result); });
+	  });                       
+    });
+	$(document).on("pagecreate","#pageone",function(){
+		initFB();
+		init();
+	});
+	
+	
+
+	function initFB() {
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyBsmf8KwJu6dcr9r_4c6SWUKXM60s0zlMI",
+			authDomain: "shoppinglist-b7c89.firebaseapp.com",
+			databaseURL: "https://shoppinglist-b7c89.firebaseio.com",
+			projectId: "shoppinglist-b7c89",
+			storageBucket: "shoppinglist-b7c89.appspot.com",
+			messagingSenderId: "282798514422"
+		};
+		firebase.initializeApp(config);
+		// Get a reference to the database service
+		database = firebase.database();
+	}
+	
+	function plusOne(item) {
+		var itemtext = item.children().first().html();
+		var splitted = itemtext.split(" ");
+		var num = splitted[0];
+		if ( !isNaN(num++) ) {
+			splitted[0] = num;
+			item.children().first().html(splitted.join(" "));
+			putDB(listid);
+			return;
+		} else {
+			item.children().first().html("1 " + splitted.join(" "));
+		}
+	}
+	function minusOne(item) {
+		var itemtext = item.children().first().html();
+		var splitted = itemtext.split(" ");
+		if ( !isNaN(splitted[0]--) ) {
+			if ( splitted[0] == 0 ) {
+				splitted.shift();
+			}
+			item.children().first().html(splitted.join(" "));
+			putDB(listid);			
+		}
+	}
+	function addNewItem(itemname) {
+		<!--var itemname = prompt("New item","");-->
+		if ( itemname != null && itemname != "" ) {
+			var newItem = createNewCurrentListItem(itemname);
+			newItem.appendTo("#currentlist");
+		}
+		$("body").trigger("domChanged");
+		<!--var list = document.getElementById("currentlist"); -->
+		<!--var tmp = list.appendChild(newItem); -->
+		<!--$("#currentlist").append(newItem); -->
+	}
+	function createNewCurrentListItem(text) {
+		<!--var div = document.createElement("div");-->
+		var div = $('<div></div>')
+		div.attr("class", "row item");
+		<!--div.setAttribute("class", "row item");;-->
+		div.append(newitemtextforcurrent(text));
+		div.append(newminus());
+		div.append(newplus());
+		div.append(newarrowright());
+		return div;
+	}
+	function createNewReserveListItem(text) {
+		<!--var div = document.createElement("div");-->
+		var div = $('<div></div>')
+		div.attr("class", "row item");
+		<!--div.setAttribute("class", "row item");;-->
+		div.append(newitemtextforreserve(text));
+		div.append(newarrowleft());
+		div.append(newtrash());
+		return div;
+	}
+	function moveToReserve(item) {
+		<!--var tmp = item.clone();-->
+		item.remove();
+		//item.attr("class", "btn ui-btn ui-shadow ui-corner-all");
+		$("div.ctrl",item).remove(); 
+		$("div.itemtext",item).attr("class", "col-xs-7 text-center itemtext");
+		item.append(newarrowleft());
+		item.append(newtrash());
+		item.appendTo(document.getElementById("reservelist"));
+		$("body").trigger("domChanged");
+	}
+	function moveToList(item) {
+		<!--var tmp = item.clone();-->
+		item.remove();
+		//tmp.attr("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
+		<!--tmp.remove(".ctrl");-->
+		$("div.ctrl",item).remove(); 
+		$("div.itemtext",item).attr("class", "col-xs-5 text-center itemtext");
+		item.append(newminus());
+		item.append(newplus());
+		item.append(newarrowright());
+		item.appendTo(document.getElementById("currentlist"));
+		$("body").trigger("domChanged");
+	}
+	function moveAllToReserve() {
+		var child = $("#currentlist").children().first();
+		while ($("#currentlist").children().length != 0) {
+			moveToReserve(child);
+			child = $("#currentlist").children().first();
+		}
+		$("body").trigger("domChanged");
+	}
+	function removeItem(item) {
+		bootbox.confirm("Delete '" + item.children().first().html() + "' permanently?", function(result){ 
+			if (result) { 
+				item.remove(); 
+				$("body").trigger("domChanged");
+			} 
+		});
+	}
+	function newminus() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-minus");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newplus() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-plus");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newarrowright() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-arrow-right");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newarrowleft() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-arrow-left");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newtrash() {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-2 ctrl");
+		var span = document.createElement("span");
+		span.setAttribute("class", "glyphicon glyphicon-trash");
+		span.setAttribute("aria-hidden", "true");
+		div.append(span);
+		return div;
+	}
+	function newitemtextforcurrent(text) {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-5 text-center itemtext");
+		div.innerHTML = text;
+		return div;
+	}
+	function newitemtextforreserve(text) {
+		var div = document.createElement("div");
+		div.setAttribute("class", "col-xs-7 text-center itemtext");
+		div.innerHTML = text;
+		return div;
+	}
+	function init() {
+		// try to read listid from local storage
+		listid = localStorage.listid;
+		// if listid found
+		if ( !listid || listid == null || listid == "null") {
+			// prompt if user wants to create a new list or use an existing shared list
+			bootbox.confirm({
+				message: "Looks like this is your first time using the app with this device. Would you like to create a new list or use an existing shared list?",
+				buttons: {
+					confirm: {
+						label: 'Create a new list',
+						className: 'btn-success'
+					},
+					cancel: {
+						label: 'Use an existing shared list',
+						className: 'btn-success'
+					}
+				},
+				callback: function (result) {
+					if ( result ) {
+						// create new list
+						listid = token();
+						localStorage.listid = listid;
+						setupDBlistener(listid);
+						initializing = false;
+						putDB(listid);
+						$("body").trigger("domChanged");
+					} else {
+						// load existing shared list
+						bootbox.prompt("Please type the list identifier", function(result){
+							localStorage.listid = result;
+							setupDBlistener(result);
+						});
+					}
+				}
+			});
+		} else {
+			setupDBlistener(listid);
+		}
+		//var jsonstr = getDB(listid);
+	}
+	function token() {
+		return Math.random().toString(36).substr(2);
+	}
+	function setupDBlistener(listid) {
+		if ( listid != null && listid != "" ) {
+			var dataRef = firebase.database().ref('lists/' + listid);
+			dataRef.on('value', function(updated) {
+				updatelists(updated.val());
+			});		
+		}
+	}
+	function updatelists(jsonstr) {
+		// clear lists
+		var child = $("#currentlist").children().first();
+		while ($("#currentlist").children().length != 0) {
+			child.remove();
+			child = $("#currentlist").children().first();
+		}
+		child = $("#reservelist").children().first();
+		while ($("#reservelist").children().length != 0) {
+			child.remove();
+			child = $("#reservelist").children().first();
+		}
+		// add new lists
+		//alert(JSON.stringify(jsonstr));
+		//var json = JSON.parse(jsonstr);
+		var json = jsonstr;
+		listid = json.listid;
+		if ( json.currentlist ) {
+			for ( var i = 0; i < json.currentlist.length; i++) {
+				var newItem = createNewCurrentListItem(json.currentlist[i]);
+				newItem.appendTo("#currentlist");
+			}		
+		}
+		if ( json.reservelist ) {
+			for ( var i = 0; i < json.reservelist.length; i++) {
+				var newItem = createNewReserveListItem(json.reservelist[i]);
+				newItem.appendTo("#reservelist");
+			}		
+		}
+		initializing = false;
+		$("body").trigger("domChanged");
+	}
+	function getDB(listid) {
+		var jsonstr = '{"listid": "CDAsfSDGF", "currentlist": ["iKaffe", "Mysli"], "reservelist": ["Viili", "Maito", "Muroja"] }';
+		return jsonstr;
+	}
+	function putDB(listid) {
+		//alert("putting db" + initializing);
+		if ( initializing ) {
+			return;
+		}
+		var data = new Object();
+		data.listid = listid;
+		var clistarray = [];
+		var currentlist = $("#currentlist");
+		for ( var i = 0; i < currentlist.children().length; i++ ) {
+			clistarray.push($("div.itemtext",currentlist.children()[i]).html());
+		}
+		data.currentlist = clistarray;
+		var rlistarray = [];
+		var reservelist = $("#reservelist");
+		for ( var i = 0; i < reservelist.children().length; i++ ) {
+			rlistarray.push($("div.itemtext",reservelist.children()[i]).html());
+		}
+		data.reservelist = rlistarray;
+		writeToFB(listid, data);
+		//alert(JSON.stringify(data));
+	}
+	function writeToFB(listid, data) {
+		if ( listid != null && listid != "" ) {
+			firebase.database().ref('lists/' + listid).set(data);		
+		} else {
+			//notify.js that unable to write because no listid
+		}
+	}
+	function share() {
+		toClipboard(listid);
+		bootbox.alert("Share your list with others by giving them this code: " + listid + " (code is copied automatically to clipboard on Android devices)");
+	}
+	function toClipboard(text) {
+		var textField = document.createElement('textarea');
+		textField.innerText = text;
+		document.body.appendChild(textField);
+		textField.select();
+		document.execCommand('copy');
+		$(textField).remove();
+	}
+	function changeList() {
+		bootbox.confirm("Are you sure you want to stop using the current list?", function(result){ 
+			if ( result ) {
+				localStorage.listid = null;
+				location.reload();
+			}
+		});
+	}
   </script>
   <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
 
