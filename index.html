@@ -31,7 +31,7 @@
 	var initializing = true;
     $(document).on("domChanged", function () {
 	  putDB(listid);
-	  <!--alert("domchange");-->
+	  alert("domchange")
 	  $("div.item").off("swipeleft");
 	  $("div.item").off("swiperight");
 	  $("div.itemtext").off("click");
