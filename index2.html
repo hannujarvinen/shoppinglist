@@ -33,8 +33,8 @@
 			putDB(listid);
 		  $("div.itemtext").off("click");
 			$("div.ctrl").off("click");
-	  	$("button.btn-add").off("click");
-	  	$("div.itemtext").on("click",function(){
+		$("button.btn-add").off("click");
+		$("div.itemtext").on("click",function(){
 				var item = $(this);
 					bootbox.prompt({title:"Modify", value:item.html(), callback:function(result){
 						if ( result != null && result != "" ) { item.html(result); }
@@ -69,7 +69,7 @@
 		alert("bootbox!!");
 		bootbox.prompt("New item", function(result){ addNewItem(result); });
 	  });                       
-    });
+	});
 	$(document).on("pagecreate","#pageone",function(){
 		initFB();
 		init();
