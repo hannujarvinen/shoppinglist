@@ -1,0 +1,83 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Shopping List</title>
+  <meta name="description" content="The Shopping List App">
+  <meta name="author" content="Hannu Järvinen">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://hannujarvinen.github.io/shoppinglist/css/styles.css">
+  <!--<link rel="stylesheet" href="./css/styles.css">-->
+  <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!--<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">-->
+  <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
+  <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+  <script src="./js/bootbox.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js"></script>
+  <!--<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-auth.js"></script>-->
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-database.js"></script>
+  <!--<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js"></script>-->
+  <script>
+  </script>
+  <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
+
+  <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+<body class="ui-mobile-viewport ui-overlay-a">
+<div data-role="page" id="pageone" data-url="pageone" tabindex="0" class="ui-page ui-page-theme-a ui-page-active" style="min-height: 963px;">
+	<div class="container-fluid">
+
+		<div class="row">
+			<div class="col-xs-12 container-fluid">
+				<button id="add" type="button" class="btn btn-info btn-md pull-right btn-add ui-btn ui-shadow ui-corner-all" aria-label="Left Align">
+				  <span class="glyphicon glyphicon-plus"></span>
+				</button>
+				<button id="add" type="button" class="btn btn-info btn-md pull-right ui-btn ui-shadow ui-corner-all" aria-label="Left Align" onclick="moveAllToReserve()">
+				  Clear list
+				</button>
+				<button id="share" type="button" class="btn btn-info btn-md pull-left ui-btn ui-shadow ui-corner-all" aria-label="Left Align" onclick="share()">
+				  Share list
+				</button>
+				<button id="share" type="button" class="btn btn-info btn-md pull-left ui-btn ui-shadow ui-corner-all" aria-label="Left Align" onclick="changeList()">
+				  Change list
+				</button>
+			</div>
+			<div class="col-xs-12 sitename container-fluid">
+			Shopping list
+			</div>
+		</div>
+		
+		<div class="row">
+			<div id="currentlist" class="col-xs-6 container-fluid">
+			<div class="row item"><div class="col-xs-5 text-center itemtext">1 suxxor</div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></div></div><div class="row item"><div class="col-xs-5 text-center itemtext">baabaa</div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></div></div><div class="row item"><div class="col-xs-5 text-center itemtext">buubuu</div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></div></div></div>
+			<div id="reservelist" class="col-xs-6 container-fluid">
+			<div class="row item"><div class="col-xs-7 text-center itemtext">muumuu</div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></div><div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></div></div></div>
+		</div>
+	
+	</div>
+
+</div>
+
+
+<!--  <script src="js/scripts.js"></script>-->
+
+
+<div class="ui-loader ui-corner-all ui-body-a ui-loader-default"><span class="ui-icon-loading"></span><h1>loading</h1></div></body>
+
+
+
+<!--  <script src="js/scripts.js"></script>-->
+</body>
+</html>

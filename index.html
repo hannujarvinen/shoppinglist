@@ -94,8 +94,7 @@
 		bootbox.prompt("New item", function(result){ addNewItem(result); });
 	  });                       
     });
-	<!-- $(document).on("pagecreate","#pageone",function(){ -->
-	$(document).on("load",function(){
+	$(document).on("pagecreate","#pageone",function(){
 		initFB();
 		init();
 	});
@@ -441,31 +440,8 @@
 		
 		<div class="row">
 			<div id="currentlist" class="col-xs-6 container-fluid">
-			<!--
-				<div class="row item">
-					<div class="col-xs-5 text-center itemtext">Maito</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right"></span></div>
-				</div>
-				<div class="row item">
-					<div class="col-xs-5 text-center itemtext">iKaffe</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-minus"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-plus"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-right"></span></div>
-				</div>-->
 			</div>
 			<div id="reservelist" class="col-xs-6 container-fluid">
-				<!--<div class="row item">
-					<div class="col-xs-7 text-center itemtext">Murot</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash"></span></div>
-				</div>
-				<div class="row item">
-					<div class="col-xs-7 text-center itemtext">Viili</div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-arrow-left"></span></div>
-					<div class="col-xs-2 ctrl"><span class="glyphicon glyphicon-trash"></span></div>
-				</div>-->
 			</div>
 		</div>
 	
