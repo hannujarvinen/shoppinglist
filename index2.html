@@ -30,20 +30,17 @@
 	  var database = null;
 	  var initializing = true;
 	  $(document).on("domChanged", function () {
-	  	  putDB(listid);
-	  });
-	  $("div.itemtext").off("click");
-	  $("div.ctrl").off("click");
-	  $("button.btn-add").off("click");
-	  $("div.itemtext").on("click",function(){
-		<!--alert("click " + $(this).attr("id"));-->
-		var item = $(this);
-		bootbox.prompt({title:"Modify", value:item.html(), callback:function(result){
-			if ( result != null && result != "" ) {
-				item.html(result);
-			}
-		}});
-	  });                       
+			putDB(listid);
+		  $("div.itemtext").off("click");
+			$("div.ctrl").off("click");
+	  	$("button.btn-add").off("click");
+	  	$("div.itemtext").on("click",function(){
+				var item = $(this);
+					bootbox.prompt({title:"Modify", value:item.html(), callback:function(result){
+						if ( result != null && result != "" ) { item.html(result); }
+						}
+					});
+			});                       
 	  $("div.ctrl").on("click",function(){
 		<!--alert("click " + $(this).attr("id"));-->
 		var item = $(this);
