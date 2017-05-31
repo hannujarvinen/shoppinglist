@@ -65,12 +65,13 @@
 			return;
 		}
 	  });                       
-	  $("button.btn-add").on("click",function(){
+	  $("#add").on("click",function(){
 		alert("bootbox!!");
 		bootbox.prompt("New item", function(result){ addNewItem(result); });
 	  });                       
 	});
-	$(document).on("load","#pageone",function(){
+
+	$(document).on("load",function(){
 		alert("OnPageCreate");
 		initFB();
 		init();
