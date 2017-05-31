@@ -313,7 +313,7 @@
 	}
 	function updatelists(jsonstr) {
 		// clear lists
-		alert("updatelists " + jsonstr);
+		alert("updatelists");
 		var child = $("#currentlist").children().first();
 		while ($("#currentlist").children().length != 0) {
 			child.remove();
@@ -325,7 +325,7 @@
 			child = $("#reservelist").children().first();
 		}
 		// add new lists
-		//alert(JSON.stringify(jsonstr));
+		alert(JSON.stringify(jsonstr));
 		//var json = JSON.parse(jsonstr);
 		var json = jsonstr;
 		listid = json.listid;
