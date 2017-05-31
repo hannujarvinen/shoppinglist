@@ -140,9 +140,13 @@
 		var div = $('<div></div>');
 		div.attr("class", "row item");
 		<!--div.setAttribute("class", "row item");;-->
+		alert("1");	
 		div.append(newitemtextforcurrent(text));
+		alert("2");	
 		div.append(newminus());
+		alert("3");	
 		div.append(newplus());
+		alert("4");	
 		div.append(newarrowright());
 		alert("createnewcurrentlistitem "+div.html());
 		return div;
@@ -151,7 +155,7 @@
 	function createNewReserveListItem(text) {
 		alert("CreateNewReserveListItem");
 		<!--var div = document.createElement("div");-->
-		var div = $('<div></div>')
+		var div = $('<div></div>');
 		div.attr("class", "row item");
 		<!--div.setAttribute("class", "row item");;-->
 		div.append(newitemtextforreserve(text));
