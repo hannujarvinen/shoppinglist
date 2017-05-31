@@ -65,13 +65,13 @@
 			return;
 		}
 	  });                       
+	});
+
+	function docInit(){ 
 	  $("#add").on("click",function(){
 		//alert("bootbox!!");
 		bootbox.prompt("New item", function(result){ addNewItem(result); });
 	  });                       
-	});
-
-	function docInit(){ 
 		//alert("OnPageCreate");
 		initFB();
 		init();
