@@ -144,7 +144,9 @@
 		div.append(newminus());
 		div.append(newplus());
 		div.append(newarrowright());
+		alert(""+div.html());
 		return div;
+		
 	}
 	function createNewReserveListItem(text) {
 		alert("CreateNewReserveListItem");
@@ -314,7 +316,9 @@
 	function updatelists(jsonstr) {
 		// clear lists
 		alert("updatelists");
-		var child = $("#currentlist").children().first();
+		$("#currentlist").html("");
+		$("#reservelist").html("");
+		/* var child = $("#currentlist").children().first();
 		while ($("#currentlist").children().length != 0) {
 			child.remove();
 			child = $("#currentlist").children().first();
@@ -323,7 +327,7 @@
 		while ($("#reservelist").children().length != 0) {
 			child.remove();
 			child = $("#reservelist").children().first();
-		}
+		} */
 		// add new lists
 		alert(JSON.stringify(jsonstr));
 		//var json = JSON.parse(jsonstr);
