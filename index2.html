@@ -213,8 +213,8 @@
 		var span = document.createElement("span");
 		span.setAttribute("class", "glyphicon glyphicon-minus");
 		span.setAttribute("aria-hidden", "true");
-		alert("2.1");
-		div.append(span);
+		alert("2.1 " + span.innerHtml() );
+		div.append(span.innerHtml());
 		return div;
 	}
 	function newplus() {
