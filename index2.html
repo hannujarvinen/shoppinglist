@@ -140,15 +140,10 @@
 		var div = $('<div></div>');
 		div.attr("class", "row item");
 		<!--div.setAttribute("class", "row item");;-->
-		alert("1");	
 		div.append(newitemtextforcurrent(text));
-		alert("2");	
 		div.append(newminus());
-		alert("3");	
 		div.append(newplus());
-		alert("4");	
 		div.append(newarrowright());
-		alert("createnewcurrentlistitem "+div.html());
 		return div;
 		
 	}
@@ -213,7 +208,6 @@
 		var span = document.createElement("span");
 		span.setAttribute("class", "glyphicon glyphicon-minus");
 		span.setAttribute("aria-hidden", "true");
-		alert("2.1 " + div.innerHtml );
 		div.appendChild(span);
 		return div;
 	}
@@ -241,7 +235,7 @@
 		var span = document.createElement("span");
 		span.setAttribute("class", "glyphicon glyphicon-arrow-left");
 		span.setAttribute("aria-hidden", "true");
-		div.append(span);
+		div.appendChild(span);
 		return div;
 	}
 	function newtrash() {
@@ -250,7 +244,7 @@
 		var span = document.createElement("span");
 		span.setAttribute("class", "glyphicon glyphicon-trash");
 		span.setAttribute("aria-hidden", "true");
-		div.append(span);
+		div.appendChild(span);
 		return div;
 	}
 	function newitemtextforcurrent(text) {
