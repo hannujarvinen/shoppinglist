@@ -213,7 +213,7 @@
 		var span = document.createElement("span");
 		span.setAttribute("class", "glyphicon glyphicon-minus");
 		span.setAttribute("aria-hidden", "true");
-		alert("2.1 " + span.innerHtml );
+		alert("2.1 " + div.innerHtml );
 		div.appendChild(span);
 		return div;
 	}
@@ -223,7 +223,7 @@
 		var span = document.createElement("span");
 		span.setAttribute("class", "glyphicon glyphicon-plus");
 		span.setAttribute("aria-hidden", "true");
-		div.append(span);
+		div.appendChild(span);
 		return div;
 	}
 	function newarrowright() {
@@ -232,7 +232,7 @@
 		var span = document.createElement("span");
 		span.setAttribute("class", "glyphicon glyphicon-arrow-right");
 		span.setAttribute("aria-hidden", "true");
-		div.append(span);
+		div.appendChild(span);
 		return div;
 	}
 	function newarrowleft() {
