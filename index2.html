@@ -33,8 +33,8 @@
 		//alert("DomChanged");
 		putDB(listid);
 		$("div.itemtext").off("click");
-		$(".row-item").off("swipeleft");
-	  	$(".row-item").off("swiperight");
+		$("div.item").off("swipeleft");
+	  	$("div.item").off("swiperight");
 		$("div.ctrl").off("click");
 		$("div.itemtext").on("click",function(){
 				var item = $(this);
@@ -43,7 +43,7 @@
 						}
 					});
 			});
-		$(".row-item").on("swiperight",function(){
+		$("div.item").on("swiperight",function(){
 			<!--alert("swiperight");-->
 			var item = $(this);
 			if ( item.parent().attr("id") == "reservelist" ) {
@@ -55,7 +55,7 @@
 			}
 	  	});
 	  	
-		$("row-item").on("swipeleft",function(){
+		$("div.item").on("swipeleft",function(){
 			var item = $(this);
 			moveToList(item);
 	  });
@@ -153,7 +153,7 @@
 		//alert("createnewCurrentListItem " + text);
 		<!--var div = document.createElement("div");-->
 		var div = $('<div></div>');
-		div.attr("class", "row-item");
+		div.attr("class", "row item");
 		<!--div.setAttribute("class", "row item");;-->
 		div.append(newitemtextforcurrent(text));
 		div.append(newminus());
@@ -166,7 +166,7 @@
 		//alert("CreateNewReserveListItem");
 		<!--var div = document.createElement("div");-->
 		var div = $('<div></div>');
-		div.attr("class", "row-item");
+		div.attr("class", "row item");
 		<!--div.setAttribute("class", "row item");;-->
 		div.append(newitemtextforreserve(text));
 		div.append(newarrowleft());
