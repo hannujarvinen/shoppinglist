@@ -68,10 +68,6 @@
 	});
 
 	function docInit(){ 
-	  $("#add").on("click",function(){
-		//alert("bootbox!!");
-		bootbox.prompt("New item", function(result){ addNewItem(result); });
-	  });                       
 		//alert("OnPageCreate");
 		initFB();
 		init();
@@ -184,6 +180,11 @@
 		item.appendTo(document.getElementById("currentlist"));
 		$("body").trigger("domChanged");
 	}
+		
+	function addBtnPress() {
+		bootbox.prompt("New item", function(result){ addNewItem(result); });
+	}
+		
 	function moveAllToReserve() {
 		//alert("MoveAllToReserve");
 		var child = $("#currentlist").children().first();
@@ -414,16 +415,16 @@
 
 		<div class="row">
 			<div class="col-xs-12 container-fluid">
-				<button id="add" type="button" class="btn btn-info btn-md pull-right btn-add" aria-label="Left Align">
+				<button id="add" type="button" class="btn btn-info btn-md pull-right btn-add" aria-label="Left Align" onclick="addBtnPress()">
 				  <span class="glyphicon glyphicon-plus"></span>
 				</button>
-				<button id="add" type="button" class="btn btn-info btn-md pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
+				<button id="clear" type="button" class="btn btn-info btn-md pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
 				  Clear list
 				</button>
 				<button id="share" type="button" class="btn btn-info btn-md pull-left" aria-label="Left Align" onclick="share()">
 				  Share list
 				</button>
-				<button id="share" type="button" class="btn btn-info btn-md pull-left" aria-label="Left Align" onclick="changeList()">
+				<button id="change" type="button" class="btn btn-info btn-md pull-left" aria-label="Left Align" onclick="changeList()">
 				  Change list
 				</button>
 			</div>
