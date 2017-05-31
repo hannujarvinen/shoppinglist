@@ -11,26 +11,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://hannujarvinen.github.io/shoppinglist/css/styles.css">
-  <!--<link rel="stylesheet" href="./css/styles.css">-->
   <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <!--<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">-->
-  <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
-  <!--<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>-->
   <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
   <script src="./js/bootbox.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js"></script>
-  <!--<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-auth.js"></script>-->
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-database.js"></script>
-  <!--<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js"></script>-->
   <script>
 	  var listid = null;
 	  var database = null;
 	  var initializing = true;
 	  $(document).on("domChanged", function () {
-		//alert("DomChanged");
 		putDB(listid);
 		$("div.itemtext").off("click");
 		$("div.item").off("swipeleft");
@@ -44,7 +37,6 @@
 					});
 			});
 		$("div.item").on("swiperight",function(){
-			<!--alert("swiperight");-->
 			var item = $(this);
 			if ( item.parent().attr("id") == "reservelist" ) {
 				removeItem(item);
@@ -61,7 +53,6 @@
 	  });
 		  
 	  $("div.ctrl").on("click",function(){
-		//alert("click " + $(this).attr("id"));
 		var item = $(this);
 		if ( $("span",this).hasClass("glyphicon-arrow-right" )) {
 			moveToReserve($(this).parent());
@@ -87,16 +78,11 @@
 	});
 
 	function docInit(){ 
-		//alert("OnPageCreate");
 		initFB();
 		init();
-	
 	};
-	
-	
 
 	function initFB() {
-		//alert("initFB");
 		// Initialize Firebase
 		var config = {
 			apiKey: "AIzaSyBsmf8KwJu6dcr9r_4c6SWUKXM60s0zlMI",
@@ -112,7 +98,6 @@
 	}
 	
 	function plusOne(item) {
-		//alert("plusOne");
 		var itemtext = item.children().first().html();
 		var splitted = itemtext.split(" ");
 		var num = splitted[0];
@@ -125,8 +110,8 @@
 			item.children().first().html("1 " + splitted.join(" "));
 		}
 	}
+
 	function minusOne(item) {
-		//alert("minusOne");
 		var itemtext = item.children().first().html();
 		var splitted = itemtext.split(" ");
 		if ( !isNaN(splitted[0]--) ) {
@@ -137,47 +122,36 @@
 			putDB(listid);			
 		}
 	}
+
 	function addNewItem(itemname) {
-		//alert("addNewItem");
-		<!--var itemname = prompt("New item","");-->
 		if ( itemname != null && itemname != "" ) {
 			var newItem = createNewCurrentListItem(itemname);
 			newItem.appendTo("#currentlist");
 		}
 		$("body").trigger("domChanged");
-		<!--var list = document.getElementById("currentlist"); -->
-		<!--var tmp = list.appendChild(newItem); -->
-		<!--$("#currentlist").append(newItem); -->
 	}
+
 	function createNewCurrentListItem(text) {
-		//alert("createnewCurrentListItem " + text);
-		<!--var div = document.createElement("div");-->
 		var div = $('<div></div>');
 		div.attr("class", "row item");
-		<!--div.setAttribute("class", "row item");;-->
 		div.append(newitemtextforcurrent(text));
 		div.append(newminus());
 		div.append(newplus());
 		div.append(newarrowright());
 		return div;
-		
 	}
+
 	function createNewReserveListItem(text) {
-		//alert("CreateNewReserveListItem");
-		<!--var div = document.createElement("div");-->
 		var div = $('<div></div>');
 		div.attr("class", "row item");
-		<!--div.setAttribute("class", "row item");;-->
 		div.append(newitemtextforreserve(text));
 		div.append(newarrowleft());
 		div.append(newtrash());
 		return div;
 	}
+
 	function moveToReserve(item) {
-		//alert("moveToReserve");
-		<!--var tmp = item.clone();-->
 		item.remove();
-		//item.attr("class", "btn ui-btn ui-shadow ui-corner-all");
 		$("div.ctrl",item).remove(); 
 		$("div.itemtext",item).attr("class", "col-xs-7 text-center itemtext");
 		item.append(newarrowleft());
@@ -185,12 +159,9 @@
 		item.appendTo(document.getElementById("reservelist"));
 		$("body").trigger("domChanged");
 	}
+
 	function moveToList(item) {
-		//alert("MoveToList");
-		<!--var tmp = item.clone();-->
 		item.remove();
-		//tmp.attr("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
-		<!--tmp.remove(".ctrl");-->
 		$("div.ctrl",item).remove(); 
 		$("div.itemtext",item).attr("class", "col-xs-5 text-center itemtext");
 		item.append(newminus());
@@ -205,7 +176,6 @@
 	}
 		
 	function moveAllToReserve() {
-		//alert("MoveAllToReserve");
 		var child = $("#currentlist").children().first();
 		while ($("#currentlist").children().length != 0) {
 			moveToReserve(child);
@@ -213,8 +183,8 @@
 		}
 		$("body").trigger("domChanged");
 	}
+
 	function removeItem(item) {
-		//alert("remove");
 		bootbox.confirm("Delete '" + item.children().first().html() + "' permanently?", function(result){ 
 			if (result) { 
 				item.remove(); 
@@ -222,6 +192,7 @@
 			} 
 		});
 	}
+
 	function newminus() {
 		var div = document.createElement("div");
 		div.setAttribute("class", "col-xs-2 ctrl");
@@ -231,6 +202,7 @@
 		div.appendChild(span);
 		return div;
 	}
+
 	function newplus() {
 		var div = document.createElement("div");
 		div.setAttribute("class", "col-xs-2 ctrl");
@@ -240,6 +212,7 @@
 		div.appendChild(span);
 		return div;
 	}
+
 	function newarrowright() {
 		var div = document.createElement("div");
 		div.setAttribute("class", "col-xs-2 ctrl");
@@ -249,6 +222,7 @@
 		div.appendChild(span);
 		return div;
 	}
+
 	function newarrowleft() {
 		var div = document.createElement("div");
 		div.setAttribute("class", "col-xs-2 ctrl");
@@ -258,6 +232,7 @@
 		div.appendChild(span);
 		return div;
 	}
+
 	function newtrash() {
 		var div = document.createElement("div");
 		div.setAttribute("class", "col-xs-2 ctrl");
@@ -273,16 +248,17 @@
 		div.innerHTML = text;
 		return div;
 	}
+
 	function newitemtextforreserve(text) {
 		var div = document.createElement("div");
 		div.setAttribute("class", "col-xs-7 text-center itemtext");
 		div.innerHTML = text;
 		return div;
 	}
+
 	function init() {
 		// try to read listid from local storage
 		listid = localStorage.listid;
-		//alert("init " + listid);
 		// if listid found
 		if ( !listid || listid == null || listid == "null") {
 			// prompt if user wants to create a new list or use an existing shared list
@@ -319,11 +295,12 @@
 		} else {
 			setupDBlistener(listid);
 		}
-		//var jsonstr = getDB(listid);
 	}
+
 	function token() {
 		return Math.random().toString(36).substr(2);
 	}
+
 	function setupDBlistener(listid) {
 		if ( listid != null && listid != "" ) {
 			var dataRef = firebase.database().ref('lists/' + listid);
@@ -332,24 +309,12 @@
 			});		
 		}
 	}
+
 	function updatelists(jsonstr) {
 		// clear lists
-		//alert("updatelists");
 		$("#currentlist").html("");
 		$("#reservelist").html("");
-		/* var child = $("#currentlist").children().first();
-		while ($("#currentlist").children().length != 0) {
-			child.remove();
-			child = $("#currentlist").children().first();
-		}
-		child = $("#reservelist").children().first();
-		while ($("#reservelist").children().length != 0) {
-			child.remove();
-			child = $("#reservelist").children().first();
-		} */
-		// add new lists
-		//alert(JSON.stringify(jsonstr));
-		//var json = JSON.parse(jsonstr);
+
 		var json = jsonstr;
 		listid = json.listid;
 		if ( json.currentlist ) {
@@ -367,12 +332,13 @@
 		initializing = false;
 		$("body").trigger("domChanged");
 	}
+
 	function getDB(listid) {
 		var jsonstr = '{"listid": "CDAsfSDGF", "currentlist": ["iKaffe", "Mysli"], "reservelist": ["Viili", "Maito", "Muroja"] }';
 		return jsonstr;
 	}
+
 	function putDB(listid) {
-		//alert("putting db" + initializing);
 		if ( initializing ) {
 			return;
 		}
@@ -391,8 +357,8 @@
 		}
 		data.reservelist = rlistarray;
 		writeToFB(listid, data);
-		//alert(JSON.stringify(data));
 	}
+
 	function writeToFB(listid, data) {
 		if ( listid != null && listid != "" ) {
 			firebase.database().ref('lists/' + listid).set(data);		
@@ -400,10 +366,12 @@
 			//notify.js that unable to write because no listid
 		}
 	}
+
 	function share() {
 		toClipboard(listid);
 		bootbox.alert("Share your list with others by giving them this code: " + listid + " (code is copied automatically to clipboard on Android devices)");
 	}
+
 	function toClipboard(text) {
 		var textField = document.createElement('textarea');
 		textField.innerText = text;
@@ -421,7 +389,6 @@
 		});
 	}
   </script>
-  <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
 
   <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
@@ -429,46 +396,37 @@
 </head>
 
 <body onload="docInit()">
-<div data-role="page" id="pageone">
-	<div class="container-fluid">
-
-		<div class="row">
-			<div class="col-xs-12 container-fluid">
-				<button id="add" type="button" class="btn btn-info btn-md pull-right btn-add" aria-label="Left Align" onclick="addBtnPress()">
-				  <span class="glyphicon glyphicon-plus"></span>
-				</button>
-				<button id="clear" type="button" class="btn btn-info btn-md pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
-				  Clear list
-				</button>
-				<button id="share" type="button" class="btn btn-info btn-md pull-left" aria-label="Left Align" onclick="share()">
-				  Share list
-				</button>
-				<button id="change" type="button" class="btn btn-info btn-md pull-left" aria-label="Left Align" onclick="changeList()">
-				  Change list
-				</button>
-			</div>
-			<div class="col-xs-12 sitename container-fluid">
-			Shopping list
-			</div>
-		</div>
-		
-		<div class="row">
-			<div id="currentlist" class="col-xs-6 container-fluid">
-			</div>
-			<div id="reservelist" class="col-xs-6 container-fluid">
-			</div>
-		</div>
+	<div data-role="page" id="pageone">
+		<div class="container-fluid">
 	
+			<div class="row">
+				<div class="col-xs-12 container-fluid">
+					<button id="add" type="button" class="btn btn-info btn-md pull-right btn-add" aria-label="Left Align" onclick="addBtnPress()">
+					<span class="glyphicon glyphicon-plus"></span>
+					</button>
+					<button id="clear" type="button" class="btn btn-info btn-md pull-right" aria-label="Left Align" onclick="moveAllToReserve()">
+					Clear list
+					</button>
+					<button id="share" type="button" class="btn btn-info btn-md pull-left" aria-label="Left Align" onclick="share()">
+					Share list
+					</button>
+					<button id="change" type="button" class="btn btn-info btn-md pull-left" aria-label="Left Align" onclick="changeList()">
+					Change list
+					</button>
+				</div>
+			
+				<div class="col-xs-12 sitename container-fluid">
+				Shopping list
+				</div>
+			</div>
+		
+			<div class="row">
+				<div id="currentlist" class="col-xs-6 container-fluid"></div>
+				<div id="reservelist" class="col-xs-6 container-fluid"></div>
+			</div>
+
+
+		</div>
 	</div>
-
-</div>
-
-
-<!--  <script src="js/scripts.js"></script>-->
-
-
-
-
-<!--  <script src="js/scripts.js"></script>-->
 </body>
 </html>
