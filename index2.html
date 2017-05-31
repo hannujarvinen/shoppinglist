@@ -33,6 +33,8 @@
 		//alert("DomChanged");
 		putDB(listid);
 		$("div.itemtext").off("click");
+		$("div.item").off("swipeleft");
+	  	$("div.item").off("swiperight");
 		$("div.ctrl").off("click");
 		$("div.itemtext").on("click",function(){
 				var item = $(this);
@@ -40,7 +42,24 @@
 						if ( result != null && result != "" ) { item.html(result); }
 						}
 					});
-			});                       
+			});
+		$("div.item").on("swiperight",function(){
+			<!--alert("swiperight");-->
+			var item = $(this);
+			if ( item.parent().attr("id") == "reservelist" ) {
+				removeItem(item);
+			} else {
+				if ( item.parent().attr("id") == "currentlist" ) {
+					moveToReserve(item);
+				}
+			}
+	  	});
+	  	
+		$("div.item").on("swipeleft",function(){
+			var item = $(this);
+			moveToList(item);
+	  });
+		  
 	  $("div.ctrl").on("click",function(){
 		//alert("click " + $(this).attr("id"));
 		var item = $(this);
