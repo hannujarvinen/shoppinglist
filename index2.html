@@ -71,12 +71,12 @@
 	  });                       
 	});
 
-	$(document).ready(function(){ /*code here*/ 
+	function docInit(){ 
 		alert("OnPageCreate");
 		initFB();
 		init();
 	
-	});
+	};
 	
 	
 
@@ -405,7 +405,7 @@
   <![endif]-->
 </head>
 
-<body>
+<body onload="docInit()">
 <div data-role="page" id="pageone">
 	<div class="container-fluid">
 
