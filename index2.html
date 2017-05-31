@@ -135,16 +135,16 @@
 		<!--$("#currentlist").append(newItem); -->
 	}
 	function createNewCurrentListItem(text) {
-		alert("createnewCurrentListItem" + text);
+		alert("createnewCurrentListItem " + text);
 		<!--var div = document.createElement("div");-->
-		var div = $('<div></div>')
+		var div = $('<div></div>');
 		div.attr("class", "row item");
 		<!--div.setAttribute("class", "row item");;-->
 		div.append(newitemtextforcurrent(text));
 		div.append(newminus());
 		div.append(newplus());
 		div.append(newarrowright());
-		alert(""+div.html());
+		alert("createnewcurrentlistitem "+div.html());
 		return div;
 		
 	}
