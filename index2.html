@@ -30,7 +30,7 @@
 	  var database = null;
 	  var initializing = true;
 	  $(document).on("domChanged", function () {
-		alert("DomChanged");
+		//alert("DomChanged");
 		putDB(listid);
 		$("div.itemtext").off("click");
 		$("div.ctrl").off("click");
@@ -66,13 +66,13 @@
 		}
 	  });                       
 	  $("#add").on("click",function(){
-		alert("bootbox!!");
+		//alert("bootbox!!");
 		bootbox.prompt("New item", function(result){ addNewItem(result); });
 	  });                       
 	});
 
 	function docInit(){ 
-		alert("OnPageCreate");
+		//alert("OnPageCreate");
 		initFB();
 		init();
 	
@@ -81,7 +81,7 @@
 	
 
 	function initFB() {
-		alert("initFB");
+		//alert("initFB");
 		// Initialize Firebase
 		var config = {
 			apiKey: "AIzaSyBsmf8KwJu6dcr9r_4c6SWUKXM60s0zlMI",
@@ -97,7 +97,7 @@
 	}
 	
 	function plusOne(item) {
-		alert("plusOne");
+		//alert("plusOne");
 		var itemtext = item.children().first().html();
 		var splitted = itemtext.split(" ");
 		var num = splitted[0];
@@ -111,7 +111,7 @@
 		}
 	}
 	function minusOne(item) {
-		alert("minusOne");
+		//alert("minusOne");
 		var itemtext = item.children().first().html();
 		var splitted = itemtext.split(" ");
 		if ( !isNaN(splitted[0]--) ) {
@@ -123,7 +123,7 @@
 		}
 	}
 	function addNewItem(itemname) {
-		alert("addNewItem");
+		//alert("addNewItem");
 		<!--var itemname = prompt("New item","");-->
 		if ( itemname != null && itemname != "" ) {
 			var newItem = createNewCurrentListItem(itemname);
@@ -148,7 +148,7 @@
 		
 	}
 	function createNewReserveListItem(text) {
-		alert("CreateNewReserveListItem");
+		//alert("CreateNewReserveListItem");
 		<!--var div = document.createElement("div");-->
 		var div = $('<div></div>');
 		div.attr("class", "row item");
@@ -159,7 +159,7 @@
 		return div;
 	}
 	function moveToReserve(item) {
-		alert("moveToReserve");
+		//alert("moveToReserve");
 		<!--var tmp = item.clone();-->
 		item.remove();
 		//item.attr("class", "btn ui-btn ui-shadow ui-corner-all");
@@ -171,7 +171,7 @@
 		$("body").trigger("domChanged");
 	}
 	function moveToList(item) {
-		alert("MoveToList");
+		//alert("MoveToList");
 		<!--var tmp = item.clone();-->
 		item.remove();
 		//tmp.attr("class", "btn btn-info ui-btn ui-shadow ui-corner-all");
@@ -185,7 +185,7 @@
 		$("body").trigger("domChanged");
 	}
 	function moveAllToReserve() {
-		alert("MoveAllToReserve");
+		//alert("MoveAllToReserve");
 		var child = $("#currentlist").children().first();
 		while ($("#currentlist").children().length != 0) {
 			moveToReserve(child);
@@ -194,7 +194,7 @@
 		$("body").trigger("domChanged");
 	}
 	function removeItem(item) {
-		alert("remove");
+		//alert("remove");
 		bootbox.confirm("Delete '" + item.children().first().html() + "' permanently?", function(result){ 
 			if (result) { 
 				item.remove(); 
@@ -262,7 +262,7 @@
 	function init() {
 		// try to read listid from local storage
 		listid = localStorage.listid;
-		alert("init " + listid);
+		//alert("init " + listid);
 		// if listid found
 		if ( !listid || listid == null || listid == "null") {
 			// prompt if user wants to create a new list or use an existing shared list
@@ -314,7 +314,7 @@
 	}
 	function updatelists(jsonstr) {
 		// clear lists
-		alert("updatelists");
+		//alert("updatelists");
 		$("#currentlist").html("");
 		$("#reservelist").html("");
 		/* var child = $("#currentlist").children().first();
@@ -328,7 +328,7 @@
 			child = $("#reservelist").children().first();
 		} */
 		// add new lists
-		alert(JSON.stringify(jsonstr));
+		//alert(JSON.stringify(jsonstr));
 		//var json = JSON.parse(jsonstr);
 		var json = jsonstr;
 		listid = json.listid;
