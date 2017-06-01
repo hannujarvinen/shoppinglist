@@ -21,6 +21,7 @@
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase-database.js"></script>
   <script>
 	  var listid = null;
+	  var listname = null;
 	  var database = null;
 	  var initializing = true;
 	  $(document).on("domChanged", function () {
@@ -50,31 +51,31 @@
 		$("div.item").on("swipeleft",function(){
 			var item = $(this);
 			moveToList(item);
-	  });
+		});
 		  
-	  $("div.ctrl").on("click",function(){
-		var item = $(this);
-		if ( $("span",this).hasClass("glyphicon-arrow-right" )) {
-			moveToReserve($(this).parent());
-			return;
-		}
-		if ( $("span",this).hasClass("glyphicon-arrow-left" )) {
-			moveToList($(this).parent());
-			return;
-		}
-		if ( $("span",this).hasClass("glyphicon-trash" )) {
-			removeItem($(this).parent());
-			return;
-		}
-		if ( $("span",this).hasClass("glyphicon-minus" )) {
-			minusOne($(this).parent());
-			return;
-		}
-		if ( $("span",this).hasClass("glyphicon-plus" )) {
-			plusOne($(this).parent());
-			return;
-		}
-	  });                       
+		  $("div.ctrl").on("click",function(){
+			var item = $(this);
+			if ( $("span",this).hasClass("glyphicon-arrow-right" )) {
+				moveToReserve($(this).parent());
+				return;
+			}
+			if ( $("span",this).hasClass("glyphicon-arrow-left" )) {
+				moveToList($(this).parent());
+				return;
+			}
+			if ( $("span",this).hasClass("glyphicon-trash" )) {
+				removeItem($(this).parent());
+				return;
+			}
+			if ( $("span",this).hasClass("glyphicon-minus" )) {
+				minusOne($(this).parent());
+				return;
+			}
+			if ( $("span",this).hasClass("glyphicon-plus" )) {
+				plusOne($(this).parent());
+				return;
+			}
+		  });                       
 	});
 
 	function docInit(){ 
@@ -317,6 +318,11 @@
 
 		var json = jsonstr;
 		listid = json.listid;
+		listname = json.listname;
+		if ( listname == null || listname == "" || listname == "null" || typeof listname == "undefined") {
+			listname = "unnamed";
+		}
+		$("#listname").html(listname);
 		if ( json.currentlist ) {
 			for ( var i = 0; i < json.currentlist.length; i++) {
 				var newItem = createNewCurrentListItem(json.currentlist[i]);
@@ -344,6 +350,7 @@
 		}
 		var data = new Object();
 		data.listid = listid;
+		data.listname = listname;
 		var clistarray = [];
 		var currentlist = $("#currentlist");
 		for ( var i = 0; i < currentlist.children().length; i++ ) {
@@ -388,6 +395,21 @@
 			}
 		});
 	}
+	function editlistname() {
+		var nameitem = $("#listname");
+		bootbox.prompt({title:"Modify list name", value:nameitem.html(), callback:function(result){
+				if ( result != null && result != "" ) { 
+					nameitem.html(result);
+					listname = result;
+					putDB(listid);
+				}
+			}
+		});
+	}
+	function listmenu() {
+		bootbox.alert("List menu is not yet implemented, sorry :(");
+	}
+	
   </script>
 
   <!--[if lt IE 9]>
@@ -414,9 +436,24 @@
 					Change list
 					</button>
 				</div>
+			</div>
 			
+			<div class="row">
 				<div class="col-xs-12 sitename container-fluid">
 				Shopping list
+				</div>
+			</div>
+			
+			<div class="row listrow">
+				<div class="col-xs-12 container-fluid">
+					<button id="listmenu" type="button" class="col-xs-2 btn btn-info btn-md pull-left" onclick="listmenu()"> 
+						<span class="glyphicon glyphicon-list"></span>
+					</button>
+					<button id="editlistname" type="button" class="col-xs-2 btn btn-info btn-md pull-left" onclick="editlistname()"> 
+						<span class="glyphicon glyphicon-edit"></span>
+					</button>
+					<div id="listname" class="listname col-xs-8">Loading list...
+					</div>
 				</div>
 			</div>
 		

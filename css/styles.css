@@ -84,4 +84,13 @@ span[class="glyphicon"] {
 	padding: 10px 10px;
     font-size: 150%;
 }
+.listname {
+	font-family: 'Lobster', cursive;
+	text-align: left;
+	padding: 2px 15px;
+    font-size: 150%;
+}
+.listrow {
+	padding: 10px 0px;
+}
 
