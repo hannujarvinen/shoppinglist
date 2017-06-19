@@ -409,7 +409,10 @@
 	function listmenu() {
 		bootbox.alert("List menu is not yet implemented, sorry :(");
 	}
-	
+	 
+	function hideReservelist() {
+		$("#reserveList").toggle(display);
+	}
   </script>
 
   <!--[if lt IE 9]>
@@ -452,8 +455,10 @@
 					<button id="editlistname" type="button" class="col-xs-2 btn btn-info btn-md pull-left" onclick="editlistname()"> 
 						<span class="glyphicon glyphicon-edit"></span>
 					</button>
-					<div id="listname" class="listname col-xs-8">Loading list...
+					<div id="listname" class="listname col-xs-6">Loading list...
 					</div>
+					<button id="hideReserve" class="col-xs-2 btn btn-info btn-sm pull-right onclick="hideReserveList()">
+					</button>
 				</div>
 			</div>
 		
