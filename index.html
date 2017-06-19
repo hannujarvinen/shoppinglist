@@ -411,7 +411,9 @@
 	}
 	 
 	function toggleReserveList() {
-		$("#reserveList").toggle(display);
+		$("#reservelist").toggle(display);
+		$("#visibilityToggleIcon").toggleClass("glyphicon-hand-right");
+		$("#visibilityToggleIcon").toggleClass("glyphicon-hand-left");
 	}
   </script>
 
@@ -458,6 +460,7 @@
 					<div id="listname" class="listname col-xs-6">Loading list...
 					</div>
 					<button id="hideReserve" class="col-xs-2 btn btn-info btn-sm pull-right onclick="toggleReserveList()">
+					<span id="visibilityToggleIcon" class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
 					</button>
 				</div>
 			</div>
