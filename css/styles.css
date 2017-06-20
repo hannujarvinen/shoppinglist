@@ -80,12 +80,12 @@ span[class="glyphicon"] {
     margin-bottom: 6px;
     margin-right: 1px;
     margin-left: 0px;
-    padding-top: 5px;
-    padding-right: 0px;
+    padding-top: 2px;
+    padding-right: 1px;
     padding-bottom: 0px;
     padding-left: 0px;
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
 }
 .ctrl span {
     font-size: xx-small;
