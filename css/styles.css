@@ -35,62 +35,78 @@
     width:20%;
 }
 */
-@media screen and (max-width: 767px){
-   .table-responsive>.table>thead>tr>th, .table-responsive>.table>tbody>tr>th, 
-   .table-responsive>.table>tfoot>tr>th, .table-responsive>.table>thead>tr>td, 
-   .table-responsive>.table>tbody>tr>td, .table-responsive>.table>tfoot>tr>td {
+
+@media screen and (max-width: 767px) {
+    .table-responsive>.table>thead>tr>th,
+    .table-responsive>.table>tbody>tr>th,
+    .table-responsive>.table>tfoot>tr>th,
+    .table-responsive>.table>thead>tr>td,
+    .table-responsive>.table>tbody>tr>td,
+    .table-responsive>.table>tfoot>tr>td {
         word-break: break-word;
-   }
+    }
 }
 body {
-  width:100%;
-  background-color: #FFFFFF;
-  background-image: url(http://www.transparenttextures.com/patterns/connected.png);
+    width: 100%;
+    background-color: #FFFFFF;
+    background-image: url(http://www.transparenttextures.com/patterns/connected.png);
 }
 div[id="currentlist"] > div {
-	/*display: inline-block;*/
-	background-color: lightblue;
+    /*display: inline-block;*/
+    background-color: lightblue;
     /*padding: -4px 4px;*/
     /*border-radius: 6px;*/
-	border: 1px solid black;
+    border: 1px solid black;
 }
 div[id="reservelist"] > div {
-	/*display: inline-block;*/
-	background-color: lightgrey;
+    /*display: inline-block;*/
+    background-color: lightgrey;
     /*padding: -4px 4px;*/
     /*border-radius: 6px;*/
-	border: 1px solid black;
+    border: 1px solid black;
 }
 span[class="glyphicon"] {
-	width:10px;
+    width: 10px;
 }
 .ctrl {
-	/*display: inline-block;*/
-	background-color: lightblue;
-	border: 1px solid black;
+    /*display: inline-block;*/
+    background-color: lightblue;
+    border: 1px solid black;
     font-size: 60%;
     border-radius: 6px;
-	/*margin: auto;*/
-	text-align: left;
-	width:29px;
+    /*margin: auto;*/
+    text-align: center;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-right: 3px;
+    margin-left: 0px;
+    padding-top: 5px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    width: 20px;
+    height: 20px;
 }
-.ctrl span{
-	font-size: xx-small;
-	line-height: 20px;
+.ctrl span {
+    font-size: xx-small;
+    text-align: center;
+    line-height: 20px;
 }
 .sitename {
-	font-family: 'Lobster', cursive;
-	text-align: center;
-	padding: 10px 10px;
+    font-family: 'Lobster', cursive;
+    text-align: center;
+    padding: 10px 10px;
     font-size: 150%;
 }
 .listname {
-	font-family: 'Lobster', cursive;
-	text-align: left;
-	padding: 2px 15px;
+    font-family: 'Lobster', cursive;
+    text-align: left;
+    padding: 2px 15px;
     font-size: 150%;
 }
 .listrow {
-	padding: 10px 0px;
+    padding: 10px 0px;
 }
-
+.text-center.itemtext {
+    padding-top: 6px;
+}
