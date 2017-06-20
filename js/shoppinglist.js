@@ -113,13 +113,13 @@ function createNewCurrentListItem(text) {
 
     // text area
     var textdiv = $('<div></div>');
-    textdiv.attr("class", "col col-xs-8 text-center itemtext");
+    textdiv.attr("class", "col col-xs-7 text-center itemtext");
     textdiv.attr("id", "label");
     textdiv.text(text);
 
     // buttons area
     var buttonsdiv = $('<div></div>');
-    buttonsdiv.attr("class", "col col-xs-4 pull-right");
+    buttonsdiv.attr("class", "col col-xs-5 pull-right");
     var buttonsrow = $('<div></div>');
     buttonsrow.attr("class", "row row-xs-12");
     buttonsrow.append(newminus());
@@ -141,13 +141,13 @@ function createNewReserveListItem(text) {
 
     // text area
     var textdiv = $('<div></div>');
-    textdiv.attr("class", "col col-xs-8 text-center itemtext");
+    textdiv.attr("class", "col col-xs-7 text-center itemtext");
     textdiv.attr("id", "label");
     textdiv.text(text);
 
     // buttons area
     var buttonsdiv = $('<div></div>');
-    buttonsdiv.attr("class", "col col-xs-4 pull-right");
+    buttonsdiv.attr("class", "col col-xs-5 pull-right");
     var buttonsrow = $('<div></div>');
     buttonsrow.attr("class", "row row-xs-12");
     buttonsrow.append(newarrowleft());
