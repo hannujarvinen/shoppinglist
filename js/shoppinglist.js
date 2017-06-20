@@ -113,13 +113,13 @@ function createNewCurrentListItem(text) {
 
     // text area
     var textdiv = $('<div></div>');
-    textdiv.attr("class", "col col-xs-11 text-center itemtext");
+    textdiv.attr("class", "col col-xs-9 text-center itemtext");
     textdiv.attr("id", "label");
     textdiv.text(text);
 
     // buttons area
     var buttonsdiv = $('<div></div>');
-    buttonsdiv.attr("class", "col col-xs-1 pull-right");
+    buttonsdiv.attr("class", "col col-xs-3 pull-right");
     var buttonsrow = $('<div></div>');
     buttonsrow.attr("class", "row row-xs-12");
     buttonsrow.append(newminus());
@@ -141,13 +141,13 @@ function createNewReserveListItem(text) {
 
     // text area
     var textdiv = $('<div></div>');
-    textdiv.attr("class", "col col-xs-11 text-center itemtext");
+    textdiv.attr("class", "col col-xs-9 text-center itemtext");
     textdiv.attr("id", "label");
     textdiv.text(text);
 
     // buttons area
     var buttonsdiv = $('<div></div>');
-    buttonsdiv.attr("class", "col col-xs-1 pull-right");
+    buttonsdiv.attr("class", "col col-xs-3 pull-right");
     var buttonsrow = $('<div></div>');
     buttonsrow.attr("class", "row row-xs-12");
     buttonsrow.append(newarrowleft());
@@ -203,7 +203,7 @@ function newminus() {
     var div = document.createElement("div");
     div.setAttribute("class", "col ctrl");
     var span = document.createElement("span");
-    span.setAttribute("class", "ctrl glyphicon glyphicon-minus");
+    span.setAttribute("class", "ctrl glyphicon glyphicon-minus pull-right");
     span.setAttribute("aria-hidden", "true");
     div.appendChild(span);
     return span;
@@ -213,7 +213,7 @@ function newplus() {
     var div = document.createElement("div");
     div.setAttribute("class", "col ctrl");
     var span = document.createElement("span");
-    span.setAttribute("class", "ctrl glyphicon glyphicon-plus");
+    span.setAttribute("class", "ctrl glyphicon glyphicon-plus pull-right");
     span.setAttribute("aria-hidden", "true");
     div.appendChild(span);
     return span;
@@ -223,7 +223,7 @@ function newarrowright() {
     var div = document.createElement("div");
     div.setAttribute("class", "col ctrl");
     var span = document.createElement("span");
-    span.setAttribute("class", "ctrl glyphicon glyphicon-arrow-right");
+    span.setAttribute("class", "ctrl glyphicon glyphicon-arrow-right pull-right");
     span.setAttribute("aria-hidden", "true");
     div.appendChild(span);
     return span;
@@ -233,7 +233,7 @@ function newarrowleft() {
     var div = document.createElement("div");
     div.setAttribute("class", "col ctrl");
     var span = document.createElement("span");
-    span.setAttribute("class", "ctrl glyphicon glyphicon-arrow-left");
+    span.setAttribute("class", "ctrl glyphicon glyphicon-arrow-left pull-right");
     span.setAttribute("aria-hidden", "true");
     div.appendChild(span);
     return span;
@@ -243,7 +243,7 @@ function newtrash() {
     var div = document.createElement("div");
     div.setAttribute("class", "col ctrl");
     var span = document.createElement("span");
-    span.setAttribute("class", "ctrl glyphicon glyphicon-trash");
+    span.setAttribute("class", "ctrl glyphicon glyphicon-trash pull-right");
     span.setAttribute("aria-hidden", "true");
     div.appendChild(span);
     return span;
