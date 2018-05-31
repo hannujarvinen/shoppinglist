@@ -341,7 +341,18 @@ function updatelists(jsonstr) {
             newItem.appendTo("#reservelist");
         }
 		var ordered = $("#reservelist > div").sort(function(a, b) {
-			if ($(a).find('div').text() < $(b).find('div').text()) {
+			var atext = $(a).find('div').text();
+			var btext = $(b).find('div').text();
+			ares = atext;
+			bres = btext;
+			// remove possible numbers in front of the item text
+			if (!isNaN(atext.split(" ")[0])) {
+				ares = atext.substring(atext.indexOf(' ')+1);
+			}
+			if (!isNaN(btext.split(" ")[0])) {
+				bres = btext.substring(btext.indexOf(' ')+1);
+			}
+			if (ares < bres) {
 				return -1;
 			} else {
 				return 1;
