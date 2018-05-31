@@ -340,6 +340,15 @@ function updatelists(jsonstr) {
             var newItem = createNewReserveListItem(json.reservelist[i]);
             newItem.appendTo("#reservelist");
         }
+		var ordered = $("#reservelist > div").sort(function(a, b) {
+			if ($(a).find('div').text() < $(b).find('div').text()) {
+				return -1;
+			} else {
+				return 1;
+			}
+		});
+		$("#reservelist").html(ordered);
+
     }
     initializing = false;
     $("body").trigger("domChanged");
@@ -451,5 +460,6 @@ function toggleReserveList() {
             }
         });
     }
-
 }
+
+
