@@ -82,7 +82,7 @@ function plusOne(item) {
         putDB(listid);
         return;
     } else {
-        item.children().first().html("1 " + splitted.join(" "));
+        item.children().first().html("2 " + splitted.join(" "));
     }
 }
 
@@ -107,6 +107,8 @@ function addNewItem(itemname) {
 }
 
 function createNewCurrentListItem(text) {
+    // sanitize characters for firebase
+    text = encodeURIComponent(text);
     // the row item
     var item = $('<div></div>');
     item.attr("class", "row item");
@@ -263,9 +265,25 @@ function newitemtextforreserve(text) {
     return div;
 }
 
+function addListToLocalStorage(listid, listname) {
+    if (!localStorage.mylists) {
+        localStorage.mylists = {};
+    }
+    if (!localStorage.mylists[listid]) {
+        var mylists = localStorage.mylists;
+        mylists[listid] = listname;
+        localStorage.mylists = mylists;
+    }
+}
+
 function init() {
-    // try to read listid from local storage
-    listid = localStorage.listid;
+    // try getting list id from url parameter
+    var url = new URL(window.location.href);
+    var listid = url.searchParams.get("list");
+    if (!listid) {
+        // try to read listid from local storage
+        listid = localStorage.listid;
+    }
     // if listid found
     if (!listid || listid == null || listid == "null") {
         // prompt if user wants to create a new list or use an existing shared list
@@ -328,6 +346,7 @@ function updatelists(jsonstr) {
     if (listname == null || listname == "" || listname == "null" || typeof listname == "undefined") {
         listname = "unnamed";
     }
+    addListToLocalStorage(listid, listname);
     $("#listname").html(listname);
     if (json.currentlist) {
         for (var i = 0; i < json.currentlist.length; i++) {
