@@ -267,12 +267,12 @@ function newitemtextforreserve(text) {
 
 function addListToLocalStorage(listid, listname) {
     if (!localStorage.mylists) {
-        localStorage.mylists = {};
+        localStorage.mylists = JSON.stringify({});
     }
-    if (!localStorage.mylists[listid]) {
-        var mylists = localStorage.mylists;
+    if (!JSON.parse(localStorage.mylists)[listid]) {
+        var mylists = JSON.parse(localStorage.mylists);
         mylists[listid] = listname;
-        localStorage.mylists = mylists;
+        localStorage.mylists = JSON.stringify(mylists);
     }
 }
 
