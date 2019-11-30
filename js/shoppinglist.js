@@ -107,7 +107,7 @@ function addNewItem(itemname) {
 }
 
 function replaceAll(str, a, b) {
-    while (str.contains(a)) {
+    while (str.indexOf(a) != -1) {
         str = str.replace(a,b);
     }
     return str;
