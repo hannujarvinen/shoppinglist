@@ -106,9 +106,21 @@ function addNewItem(itemname) {
     $("body").trigger("domChanged");
 }
 
+function replaceAll(str, a, b) {
+    while (str.contains(a)) {
+        str = str.replace(a,b);
+    }
+    return str;
+}
+
+function sanitizeValue(str) {
+    str = replaceAll(str, '&', 'and');
+    return str;
+}
+
 function createNewCurrentListItem(text) {
     // sanitize characters for firebase
-    text = encodeURIComponent(text);
+    text = sanitizeValue(text);
     // the row item
     var item = $('<div></div>');
     item.attr("class", "row item");
